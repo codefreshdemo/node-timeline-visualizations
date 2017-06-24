@@ -1,0 +1,25 @@
+version: '1.0'
+steps:
+  build_step:
+    type: build
+    image_name: codefreshdemo/twit-timeline
+    dockerfile: Dockerfile
+    tag: ${{CF_BRANCH}}
+
+  launch_environment:
+    title: Interactive timeline
+    type: launch-composition
+    composition:
+      version: '2'
+      services:
+        twit_timeline:
+          image: ${{build_step}}
+          ports:
+            - 3000
+          environment:
+            - TWIT_CONSUMER_KEY=${{TWIT_CONSUMER_KEY}}
+            - TWIT_CONSUMER_SECRET=${{TWIT_CONSUMER_SECRET}}
+            - TWIT_TOKEN=${{TWIT_TOKEN}}
+            - TWIT_TOKEN_SECRET=${{TWIT_TOKEN_SECRET}}
+            - TWIT_SCREEN_NAME=${{TWIT_SCREEN_NAME}}
+    environment_name: 'twit-timeline'
